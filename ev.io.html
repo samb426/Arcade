@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ev.io — The Arcade Room</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#0B0A0F;overflow:hidden}
+  body{display:flex;flex-direction:column;font-family:"Space Mono",ui-monospace,monospace}
+
+  .bar{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:9px 16px;background:#17141F;border-bottom:1px solid #2A2438;flex:0 0 auto;
+  }
+  .bar a,.bar summary{
+    color:#8B8496;text-decoration:none;cursor:pointer;
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+    transition:color .18s;list-style:none;
+  }
+  .bar summary::-webkit-details-marker{display:none}
+  .bar a:hover,.bar summary:hover,.bar a:focus-visible{color:#35E0E8}
+  .bar button{
+    background:none;border:1px solid #2A2438;border-radius:3px;cursor:pointer;
+    color:#8B8496;font-family:inherit;font-size:.62rem;letter-spacing:.16em;
+    text-transform:uppercase;padding:5px 11px;transition:color .18s,border-color .18s;
+  }
+  .bar button:hover,.bar button:focus-visible{color:#FFC247;border-color:#FFC247;outline:none}
+  .bar strong{
+    margin-left:auto;color:#FFC247;font-weight:400;
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+  }
+
+  details{position:relative}
+  details[open] summary{color:#35E0E8}
+  .keys{
+    position:absolute;top:26px;left:0;z-index:5;width:max-content;max-width:88vw;
+    background:#17141F;border:1px solid #2A2438;border-radius:5px;
+    padding:14px 16px;box-shadow:0 18px 40px rgba(0,0,0,.7);
+    font-size:.68rem;line-height:1.9;color:#8B8496;letter-spacing:.04em;text-transform:none;
+  }
+  .keys b{color:#FFF3D6;font-weight:400}
+  .keys span{color:#E8402A}
+
+  /* ev.io lays itself out against the viewport, so it just gets the whole box.
+     No crop here — the strip at the bottom is their ad slot, and that's what
+     pays for the game being free. */
+  .stage{flex:1 1 auto;min-height:0;position:relative;background:#000}
+  iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a href="index.html">&larr; Back to the arcade</a>
+
+  <details>
+    <summary>Controls</summary>
+    <div class="keys">
+      <b>Move</b> WASD &nbsp;&middot;&nbsp; <b>Jump</b> Space &nbsp;&middot;&nbsp; <b>Look / shoot</b> mouse<br>
+      <b>Ability</b> Q / E &nbsp;&middot;&nbsp; <b>Reload</b> R &nbsp;&middot;&nbsp; <b>Weapons</b> 1–3 or scroll<br>
+      <b>Scoreboard</b> Tab &nbsp;&middot;&nbsp; <b>Chat</b> Enter &nbsp;&middot;&nbsp; <b>Menu</b> M<br>
+      <span>Click the game first — it needs to capture your mouse before you can look around.</span>
+    </div>
+  </details>
+
+  <button id="full" type="button">Fullscreen &#9974;</button>
+  <a href="https://ev.io/" target="_blank" rel="noopener">Open on ev.io &#8599;</a>
+  <strong>ev.io</strong>
+</div>
+
+<div class="stage" id="stage">
+  <iframe
+    src="https://ev.io/"
+    title="ev.io"
+    allow="autoplay; fullscreen; gamepad; pointer-lock"
+    allowfullscreen></iframe>
+</div>
+
+<script>
+const stage = document.getElementById("stage");
+document.getElementById("full").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else stage.requestFullscreen && stage.requestFullscreen();
+});
+</script>
+</body>
+</html>

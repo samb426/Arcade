@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyperspace Racers 3 — The Arcade Room</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#0B0A0F;overflow:hidden}
+  body{display:flex;flex-direction:column;font-family:"Space Mono",ui-monospace,monospace}
+
+  .bar{
+    display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    padding:9px 16px;background:#17141F;border-bottom:1px solid #2A2438;flex:0 0 auto;
+  }
+  .bar a,.bar summary{
+    color:#8B8496;text-decoration:none;cursor:pointer;
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+    transition:color .18s;list-style:none;
+  }
+  .bar summary::-webkit-details-marker{display:none}
+  .bar a:hover,.bar summary:hover,.bar a:focus-visible{color:#35E0E8}
+  .bar button{
+    background:none;border:1px solid #2A2438;border-radius:3px;cursor:pointer;
+    color:#8B8496;font-family:inherit;font-size:.62rem;letter-spacing:.16em;
+    text-transform:uppercase;padding:5px 11px;transition:color .18s,border-color .18s;
+  }
+  .bar button:hover,.bar button:focus-visible{color:#FFC247;border-color:#FFC247;outline:none}
+  .bar strong{
+    margin-left:auto;color:#FFC247;font-weight:400;
+    font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+  }
+
+  details{position:relative}
+  details[open] summary{color:#35E0E8}
+  .keys{
+    position:absolute;top:26px;left:0;z-index:5;width:max-content;max-width:88vw;
+    background:#17141F;border:1px solid #2A2438;border-radius:5px;
+    padding:14px 16px;box-shadow:0 18px 40px rgba(0,0,0,.7);
+    font-size:.68rem;line-height:1.9;color:#8B8496;letter-spacing:.04em;text-transform:none;
+  }
+  .keys b{color:#FFF3D6;font-weight:400}
+  .keys em{color:#35E0E8;font-style:normal}
+  .keys span{color:#E8402A}
+
+  /* Unity resizes its canvas to whatever box it's given, so the frame is sized
+     in real pixels rather than scaled with a transform — that keeps it sharp.
+     The frame is grown BAR px taller than the crop so itch's strip falls
+     just outside the visible area and gets clipped. */
+  .stage{
+    flex:1 1 auto;min-height:0;background:#000;
+    display:grid;place-items:center;overflow:hidden;padding:8px;
+  }
+  .stage:fullscreen{padding:0}
+  .crop{position:relative;overflow:hidden;box-shadow:0 0 50px rgba(53,224,232,.1)}
+  .frame{position:absolute;top:0;left:0}
+  iframe{width:100%;height:100%;border:0;display:block}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <a href="index.html">&larr; Back to the arcade</a>
+
+  <details>
+    <summary>Controls</summary>
+    <div class="keys">
+      <b>Accelerate</b> W or &uarr; &nbsp;&middot;&nbsp; <b>Steer</b> A / D or &larr; &rarr;<br>
+      <b>Boost</b> Space &nbsp;&middot;&nbsp; <b>Rear view</b> Shift &nbsp;&middot;&nbsp; <b>Pause</b> E<br>
+      <em>Energy &amp; boost</em> — hit 0 energy and you crash. Green pads refill energy,
+      and once you're full they top up boost too.<br>
+      <span>Unlock everything: LShift + RShift + Space + Enter + Backspace</span>
+    </div>
+  </details>
+
+  <button id="full" type="button">Fullscreen &#9974;</button>
+  <a href="https://wa2ab1.itch.io/hyperspace-racers-3" target="_blank" rel="noopener">Open on itch.io &#8599;</a>
+  <strong>Hyperspace Racers 3</strong>
+</div>
+
+<div class="stage" id="stage">
+  <div class="crop" id="crop">
+    <div class="frame" id="frame">
+      <iframe
+        src="https://itch.io/embed-upload/5658186?color=293f54"
+        title="Hyperspace Racers 3 by WA2AB1"
+        allow="autoplay; fullscreen; gamepad"
+        allowfullscreen
+        scrolling="no"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+const BAR = 40;                    /* itch's strip along the bottom */
+const RATIO = 16 / 9;              /* the game is declared 640x360 */
+
+const stage = document.getElementById("stage");
+const crop  = document.getElementById("crop");
+const frame = document.getElementById("frame");
+
+function fit(){
+  const availW = stage.clientWidth  - 16;
+  const availH = stage.clientHeight - 16;
+
+  let w = availW, h = w / RATIO;
+  if (h > availH){ h = availH; w = h * RATIO; }
+
+  crop.style.width   = w + "px";
+  crop.style.height  = h + "px";
+  frame.style.width  = w + "px";
+  frame.style.height = (h + BAR) + "px";
+}
+
+document.getElementById("full").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else stage.requestFullscreen && stage.requestFullscreen();
+});
+
+addEventListener("resize", fit);
+document.addEventListener("fullscreenchange", fit);
+new ResizeObserver(fit).observe(stage);
+fit();
+</script>
+</body>
+</html>
